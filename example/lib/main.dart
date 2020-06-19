@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -144,7 +146,8 @@ class _QRViewExampleState extends State<QRViewExample> {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        qrText = scanData;
+        var json = jsonDecode(scanData);
+        qrText = "${json['text']}, ${json['format']}";
       });
     });
   }

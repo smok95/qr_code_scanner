@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.View
 import com.google.zxing.ResultPoint
 import android.hardware.Camera.CameraInfo
+import android.util.JsonWriter
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.BarcodeView
@@ -18,6 +19,7 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.PluginRegistry
 import io.flutter.plugin.platform.PlatformView
+import org.json.JSONObject
 
 class QRView(private val registrar: PluginRegistry.Registrar, id: Int) :
         PlatformView,MethodChannel.MethodCallHandler {
@@ -124,7 +126,11 @@ class QRView(private val registrar: PluginRegistry.Registrar, id: Int) :
         barcode.decodeContinuous(
                 object : BarcodeCallback {
                     override fun barcodeResult(result: BarcodeResult) {
-                        channel.invokeMethod("onRecognizeQR", result.text)
+                        var jsonObj = JSONObject()
+                        jsonObj.put("text", result.text)
+                        jsonObj.put("format", result.barcodeFormat.name)
+
+                        channel.invokeMethod("onRecognizeQR", jsonObj.toString())
                     }
 
                     override fun possibleResultPoints(resultPoints: List<ResultPoint>) {}
