@@ -83,7 +83,12 @@ class _QRViewExampleState extends State<QRViewExample> {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        qrText = scanData;
+        if (Platform.isAndroid) {
+          var json = jsonDecode(scanData);
+          qrText = "${json['text']}, ${json['format']}";
+        } else if (Platform.isIOS) {
+          qrText = scanData;
+        }        
       });
     });
   }
