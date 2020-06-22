@@ -136,6 +136,9 @@ class QRView(private val registrar: PluginRegistry.Registrar, id: Int) :
                     override fun possibleResultPoints(resultPoints: List<ResultPoint>) {}
                 }
         )
+
+        barcode?.cameraSettings.setContinuousFocusEnabled(true)
+
         return barcode
     }
 
